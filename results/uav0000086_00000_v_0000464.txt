@@ -1,0 +1,7 @@
+pedestrian,100,413,53,104
+pedestrian,535,318,40,91
+pedestrian,571,205,32,50
+pedestrian,516,358,51,105
+pedestrian,616,319,36,74
+pedestrian,816,304,27,71
+pedestrian,183,266,42,45

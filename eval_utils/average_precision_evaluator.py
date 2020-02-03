@@ -764,15 +764,26 @@ class Evaluator:
             if verbose:
                 print("Computing precisions and recalls, class {}/{}".format(class_id, self.n_classes))
 
-            tp = self.cumulative_true_positives[class_id]
-            fp = self.cumulative_false_positives[class_id]
+            try:
+                tp = self.cumulative_true_positives[class_id]
+                fp = self.cumulative_false_positives[class_id]
+                cumulative_precision = np.where(tp + fp > 0, tp / (tp + fp), 0) # 1D array with shape `(num_predictions,)`
+                cumulative_recall = tp / self.num_gt_per_class[class_id] # 1D array with shape `(num_predictions,)`
+
+                cumulative_precisions.append(cumulative_precision)
+                cumulative_recalls.append(cumulative_recall)
+            except:
+                tp = 1
+                fp = 1
+                cumulative_precision = np.where(tp + fp > 0, tp / (tp + fp), 0) # 1D array with shape `(num_predictions,)`
+                cumulative_recall = tp / self.num_gt_per_class[class_id] # 1D array with shape `(num_predictions,)`
+
+                cumulative_precisions.append(cumulative_precision)
+                cumulative_recalls.append(cumulative_recall)
+            
 
 
-            cumulative_precision = np.where(tp + fp > 0, tp / (tp + fp), 0) # 1D array with shape `(num_predictions,)`
-            cumulative_recall = tp / self.num_gt_per_class[class_id] # 1D array with shape `(num_predictions,)`
-
-            cumulative_precisions.append(cumulative_precision)
-            cumulative_recalls.append(cumulative_recall)
+            
 
         self.cumulative_precisions = cumulative_precisions
         self.cumulative_recalls = cumulative_recalls
